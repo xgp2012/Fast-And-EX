@@ -2,6 +2,8 @@
 
 A Minecraft 1.8.9 Chinese PVP Client based on Tritium-X
 
+> 本项目是基于 [HowXu/Chocolate](https://github.com/HowXu/Chocolate) 的**二次开发（fork）**，原作者为 HowXu，仅用于学习与研究，版权归原作者所有。
+
 > [!CAUTION]\
 > 因为MCP项目的特殊性，没有协议能够适配本项目，src源文件分散为三个部分:\
 > Tritium-X及本人加入的代码在此仓库，javax和mcp的反混淆代码通过子模块存放在其他仓库中\

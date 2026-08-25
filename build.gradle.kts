@@ -22,7 +22,7 @@ tasks.withType<JavaCompile>{
     options.encoding="UTF-8"
 }
 
-group = "cn.howxu.chocolate"
+group = "cn.howxu.exclient"
 version = "2.2"
 
 repositories {
