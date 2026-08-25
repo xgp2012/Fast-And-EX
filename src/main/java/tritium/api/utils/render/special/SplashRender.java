@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import cn.howxu.render.FontRender;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -71,7 +72,11 @@ public class SplashRender {
 		framebuffer.framebufferRender(sr.getScaledWidth() * i, sr.getScaledHeight() * i);
 		GlStateManager.enableAlpha();
 		GlStateManager.alphaFunc(516, 0.1F);
-		mc.updateDisplay();
+		// Use Display.update() directly instead of mc.updateDisplay(): the latter also
+		// runs checkWindowResize() -> updateShaderGroupSize(), which dereferences
+		// mc.renderGlobal. That field is still null during the splash screen and would
+		// throw NullPointerException. Swapping buffers is all the splash needs.
+		Display.update();
 	}
 
 	private static void drawImage(ResourceLocation image, double x, double y, double width, double height) {		
