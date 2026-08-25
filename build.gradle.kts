@@ -27,10 +27,10 @@ version = "2.2"
 
 repositories {
     mavenCentral()
-    //tv.twitch在这找到
-    maven { url = uri("https://nexus.velocitypowered.com/repository/maven-public/")}
-    //Mojang啥时候开了个maven库
+    //Mojang官方库，MC相关依赖(netty/icu4j/codecjorbis/oshi等)都在这，且稳定
     maven { url = uri("https://libraries.minecraft.net/")}
+    //tv.twitch等少数库在这找；该源不稳定(偶发522)，放最后作兜底
+    maven { url = uri("https://nexus.velocitypowered.com/repository/maven-public/")}
 }
 
 //println(extensions.getByName("chocolate"))
