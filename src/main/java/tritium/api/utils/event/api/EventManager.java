@@ -1,5 +1,7 @@
 package tritium.api.utils.event.api;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -127,6 +129,17 @@ public final class EventManager {
 		if (!data.getTarget().isAccessible()) {
 			data.getTarget().setAccessible(true);
 		}
+
+		// Build a MethodHandle for fast dispatch. Falls back to reflection when the
+		// lookup has no access to the method (e.g. foreign private handlers on JDK 8).
+		MethodHandle handle = null;
+		try {
+			MethodHandle mh = MethodHandles.lookup().unreflect(method);
+			handle = mh.asType(mh.type().changeParameterType(0, Object.class).changeReturnType(Object.class));
+		} catch (Throwable ignored) {
+			handle = null;
+		}
+		data.setHandle(handle);
 
 		if (REGISTRY_MAP.containsKey(indexClass)) {
 			if (!REGISTRY_MAP.get(indexClass).contains(data)) {
@@ -282,6 +295,15 @@ public final class EventManager {
 	 *                 TODO: Error messages.
 	 */
 	private static void invoke(MethodData data, Event argument) {
+		MethodHandle handle = data.getHandle();
+		if (handle != null) {
+			try {
+				@SuppressWarnings("unused")
+				Object ignored = handle.invoke((Object) argument);
+			} catch (Throwable ignored) {
+			}
+			return;
+		}
 		try {
 			data.getTarget().invoke(data.getSource(), argument);
 		} catch (IllegalAccessException e) {
@@ -302,6 +324,8 @@ public final class EventManager {
 		private final Method target;
 
 		private final byte priority;
+
+		private MethodHandle handle;
 
 		/**
 		 * Sets the values of the data.
@@ -343,6 +367,21 @@ public final class EventManager {
 		 */
 		public byte getPriority() {
 			return priority;
+		}
+
+		/**
+		 * Gets the cached MethodHandle used for fast dispatch, or null to fall back to
+		 * reflection.
+		 */
+		public MethodHandle getHandle() {
+			return handle;
+		}
+
+		/**
+		 * Sets the cached MethodHandle used for fast dispatch.
+		 */
+		public void setHandle(MethodHandle handle) {
+			this.handle = handle;
 		}
 
 	}

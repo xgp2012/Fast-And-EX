@@ -71,9 +71,15 @@ public class Wings extends Module {
         EventManager.unregister(wings);
     }
 
+    // Reused buffer to avoid allocating a new float[] on every wing render frame.
+    private final float[] cachedColors = new float[3];
+
     public float[] getColors() {
         if (!colored.getValue()) {//选择为无色则返回1.1.1
-            return new float[]{1F, 1F, 1F};
+            cachedColors[0] = 1F;
+            cachedColors[1] = 1F;
+            cachedColors[2] = 1F;
+            return cachedColors;
         }
 
 
@@ -81,18 +87,15 @@ public class Wings extends Module {
         Color setting_color = color.getValue().getColor();
 
         if (color.rainbow.getValue()){
-            return new float[] {
-                (System.currentTimeMillis() % (1000L * color.rainbowspeed.getValue().intValue())) / 255.0f,
-                setting_color.getGreen() / 255.0f,
-                setting_color.getBlue() / 255.0f
-            };
+            cachedColors[0] = (System.currentTimeMillis() % (1000L * color.rainbowspeed.getValue().intValue())) / 255.0f;
+            cachedColors[1] = setting_color.getGreen() / 255.0f;
+            cachedColors[2] = setting_color.getBlue() / 255.0f;
         }else {
-            return new float[] {
-                    setting_color.getRed() / 255.0f,
-                    setting_color.getGreen() / 255.0f,
-                    setting_color.getBlue() / 255.0f
-            };
+            cachedColors[0] = setting_color.getRed() / 255.0f;
+            cachedColors[1] = setting_color.getGreen() / 255.0f;
+            cachedColors[2] = setting_color.getBlue() / 255.0f;
         }
+        return cachedColors;
 
         //Color apply_color = new Color(255,255,255,0);
 
