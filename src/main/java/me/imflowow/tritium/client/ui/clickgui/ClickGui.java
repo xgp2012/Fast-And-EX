@@ -205,6 +205,9 @@ public class ClickGui extends GuiScreen {
 
 	public int getColor(int type) {
 		ClientConfig config = (ClientConfig) Tritium.instance.getModuleManager().getModule(ClientConfig.class);
+		if (config == null || config.theme == null) {
+			return new Color(21, 21, 21, this.alpha).getRGB();
+		}
 		switch (config.theme.getValue()) {
 		case Dark:
 			switch (type) {
