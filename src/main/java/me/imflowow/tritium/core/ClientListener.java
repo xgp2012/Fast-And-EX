@@ -65,6 +65,9 @@ public class ClientListener {
 	// (Minecraft.java, external repo we must not edit). Override it here once, on the
 	// first client tick, so the title shows EXClient without touching the submodule.
 	private boolean titleRenamed = false;
+	// Edge detection for the ClickGui open key, driven by TickEvent (the custom
+	// KeyPressEvent is unreliable in this build, so we poll the live key state instead).
+	private boolean clickGuiKeyWasDown = false;
 	public MCACUtils mcac;
 	public EPlusUtils eplus;
 
@@ -93,21 +96,6 @@ public class ClientListener {
 
 	@EventTarget
 	public void onKeyPress(KeyPressEvent event) {
-		int key = event.getKey();
-		System.err.println("[EXClient][key] " + key);
-		// 打开面板放在最前面，避免后面的模块 toggle 循环抛异常（事件总线会吞异常）
-		// 导致 displayGuiScreen 永远执行不到、面板静默打不开。
-		// 兼容两种键码：KEY_M(39) 或字符事件 'm'+256(365)
-		if (key == Keyboard.KEY_M || key == 365) {
-			System.err.println("[EXClient] opening ClickGui");
-			try {
-				mc.displayGuiScreen(gui);
-			} catch (Throwable t) {
-				System.err.println("[EXClient] failed to open ClickGui:");
-				t.printStackTrace();
-			}
-		}
-
 		// System.out.println(event.getKey());
 		Tritium.instance.getModuleManager().getModuleMap().values().forEach(m -> {
 			if (m.getKeybind() == event.getKey()) {
@@ -125,6 +113,17 @@ public class ClientListener {
 			Display.setTitle("EXClient 1.8.9");
 			titleRenamed = true;
 		}
+	}
+
+	// Open the ClickGui with the M key. Uses TickEvent + Keyboard.isKeyDown edge
+	// detection instead of KeyPressEvent, which was not being dispatched.
+	@EventTarget
+	public void onTickOpenGui(TickEvent event) {
+		boolean down = Keyboard.isKeyDown(Keyboard.KEY_M);
+		if (down && !clickGuiKeyWasDown) {
+			mc.displayGuiScreen(gui);
+		}
+		clickGuiKeyWasDown = down;
 	}
 
 	@EventTarget
