@@ -42,7 +42,8 @@ public class ModuleManager {
 				ItemPhysic.class, LowFire.class, KeyStrokes.class, BlockOverlay.class, ArmorDisplay.class,
 				Crosshair.class, ReachDisplay.class, CPSDisplay.class, PotionDisplay.class, CustomParticles.class,
 				EnchantEffect.class, DuelInfo.class, FPSDisplay.class, ClockDisplay.class, PingDisplay.class,
-				CoordDisplay.class, SelfHealth.class, AutoGG.class, DamageDealt.class, CustomScoreboard.class, Wings.class};
+				CoordDisplay.class, SelfHealth.class, AutoGG.class, DamageDealt.class, CustomScoreboard.class,
+				Wings.class, PerformanceMonitor.class, EntityCulling.class};
 		//添加Wings组件
 
 		for (Class class_ : globals) {

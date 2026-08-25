@@ -2,7 +2,9 @@ package tritium.api.utils.font;
 
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.core.lookup.SystemPropertiesLookup;
 import org.lwjgl.opengl.GL11;
@@ -47,6 +49,8 @@ public class MCFontRenderer extends CFont {
 		setupMinecraftColorcodes();
 		setupBoldItalicIDs();
 	}
+
+	private final Map<String, Integer> widthCache = new HashMap<>();
 
 	public float drawStringWithShadow(String text, double x, double y, int color) {
 		float shadowWidth = drawString(text, x + 0.5D, y + 0.5D, color, true);
@@ -235,7 +239,13 @@ public class MCFontRenderer extends CFont {
 		if (text == null) {
 			return 0;
 		}
-		
+
+		final String cacheKey = text;
+		final Integer cached = this.widthCache.get(cacheKey);
+		if (cached != null) {
+			return cached;
+		}
+
     	RenderStringEvent event = new RenderStringEvent(text);
     	EventManager.call(event);
     	text = event.getText();
@@ -293,7 +303,12 @@ public class MCFontRenderer extends CFont {
 			}
 		}
 
-		return width / 2;
+		final int result = width / 2;
+		if (this.widthCache.size() > 1024) {
+			this.widthCache.clear();
+		}
+		this.widthCache.put(cacheKey, result);
+		return result;
 	}
 
 	@Override
