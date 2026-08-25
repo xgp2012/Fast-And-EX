@@ -118,7 +118,7 @@ public class ClientListener {
 				lib.classloader = null;
 				lib.setLoaded(false);
 				System.gc();
-				File directory = new File(new File(Minecraft.getMinecraft().mcDataDir, "chocolate"), "libraries");
+				File directory = new File(new File(Minecraft.getMinecraft().mcDataDir, "exclient"), "libraries");
 				//存的是什么我也不知道
 				File [] files = directory.listFiles();
 				if (!directory.exists()) {

@@ -44,7 +44,7 @@ public class MainMenu extends GuiScreen {
     Deconverge textDeconverge;
 
     //这里是设置标题
-    String TitleText = "Chocolate";
+    String TitleText = "EXClient";
     int TitleText_Lenth = Tritium.instance.getFontManager().ariaBoldl48.getStringWidth(TitleText);
 
     //int title_textDeconverge_height = this.height / 5;

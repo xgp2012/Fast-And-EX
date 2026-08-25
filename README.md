@@ -1,4 +1,4 @@
-# Chocolate
+# EXClient
 
 A Minecraft 1.8.9 Chinese PVP Client based on Tritium-X
 
@@ -16,15 +16,15 @@ A Minecraft 1.8.9 Chinese PVP Client based on Tritium-X
 
 1. 前往release页下载发布文件
 
-2. 解压该文件，将得到的名为Chocolate的文件夹移动到你的.minecraft文件夹的versions目录下
+2. 解压该文件，将得到的名为EXClient的文件夹移动到你的.minecraft文件夹的versions目录下
 
-3. 使用任意一款启动器选择游戏版本为Chocolate启动
+3. 使用任意一款启动器选择游戏版本为EXClient启动
 
-## 为什么改名叫Chocolate？
+## 为什么叫EXClient？
 
 单纯觉得好听一些
 
-## Chocolate修改了什么？
+## EXClient修改了什么？
 
 1. 修改了启动画面，使用百分比布局替代了原本不合理的绝对参数，添加了启动进度条文字描述
 
@@ -49,8 +49,9 @@ A Minecraft 1.8.9 Chinese PVP Client based on Tritium-X
 本项目需要拉取分散的mcp反混淆后的mc代码和内置的javax源代码两个模块，你应该使用以下命令克隆：
 
 ```bash
-git clone --recursive git@github.com:HowXu/Chocolate.git
+git clone --recursive git@github.com:xgp2012/Fast-And-EX.git
 ```
+
 或者在正常克隆后运行以下命令拉取子模块：
 
 ```bash
@@ -95,9 +96,6 @@ git submodule update
 
 
 ## 源代码感谢
-
 感谢[GitHub - ImFl0wow/Tritium-Open](https://github.com/ImFl0wow/Tritium-Open) 源代码
-
 感谢[GitHub - Canelex/DragonWingsMod](https://github.com/Canelex/DragonWingsMod) 龙翼组件
-
 感谢[OPPO](https://www.coloros.com/article/A00000050/) OPPOSans字体提供

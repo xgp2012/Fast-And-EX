@@ -129,7 +129,7 @@ public class Window extends UIComponent {
 
 		Tritium.instance.getFontManager().logo24.drawString("a", positionX + 8 + diffX, positionY + 6.4 + diffY,
 				this.getColor(1));
-		Tritium.instance.getFontManager().arialBold18.drawString("Chocolate", positionX + 20 + diffX,
+		Tritium.instance.getFontManager().arialBold18.drawString("EXClient", positionX + 20 + diffX,
 				positionY + 7.5 + diffY, this.getColor(1));
 
 		this.lastMouseX = mouseX;

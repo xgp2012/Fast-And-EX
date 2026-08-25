@@ -41,4 +41,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            ./build/cache/Chocolate.zip
+            ./build/cache/*.zip

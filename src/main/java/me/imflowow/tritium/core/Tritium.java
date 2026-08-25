@@ -51,7 +51,7 @@ public class Tritium {
 		this.wrapper = new Wrapper();
 		this.wrapper.init(this.wrapper);
 
-		File directory = new File(Minecraft.getMinecraft().mcDataDir, "chocolate");
+		File directory = new File(Minecraft.getMinecraft().mcDataDir, "exclient");
 		//这里是开始时保存配置文件的地方 原来的文件夹为Tritium-X
 		if (!directory.exists()) {
 			directory.mkdir();
@@ -132,7 +132,7 @@ public class Tritium {
 	}
 
 	public void onStop() {
-		File directory = new File(Minecraft.getMinecraft().mcDataDir, "chocolate");
+		File directory = new File(Minecraft.getMinecraft().mcDataDir, "exclient");
 		//这里是停止时保存配置文件的地方 原来的文件夹为Tritium-X
 		if (!directory.exists())
 			directory.mkdir();
