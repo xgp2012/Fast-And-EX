@@ -127,6 +127,13 @@ maven { url = "https://nexus.velocitypowered.com/repository/maven-public/" } // 
    - 改为在**本项目自有可编辑代码**里覆盖：新增 `onTickRename(TickEvent)` 处理器，在第一个 client tick 时 `Display.setTitle("EXClient 1.8.9")` 一次（`titleRenamed` 布尔守卫）。
    - 效果：启动后窗口标题即显示 EXClient（加载瞬间可能闪一下 "Chocolate"，之后被覆盖）。无需动子模块，CI 生效。
 
+6. **性能优化模块（借鉴 FPSMaster-Edge 思路）**
+   - 新增 `PerformanceMonitor` 模块（`me/imflowow/tritium/core/modules/PerformanceMonitor.java` + `components/informations/PerformanceEntity.java`）：HUD 显示 FPS / 帧时间(ms) / 内存(MB)，沿用 `FPSDisplay` 的 `GuiEntity` 组件模式，默认关闭。
+     - 注意：项目自带 `FPSDisplay`（同类 FPS 显示，默认即关闭）仍保留，二者可并存；若要统一，用户可在 ClickGUI 关掉其中一个。
+   - 新增 `EntityCulling` 模块（`me/imflowow/tritium/core/modules/EntityCulling.java`）：订阅 `RenderNametagEvent`（可取消，在 `RendererLivingEntity.renderName` 里 `if (event.isCancelled()) return;`），启用时隐藏所有实体名牌。
+   - `MCFontRenderer.getStringWidth` 增加宽度缓存 `widthCache`（`HashMap`，上限 1024 后清空），对应 FPSMaster 的“字符串渲染缓存”思路，纯提速、无视觉变化（已在可编辑的 `tritium` 基础内，未碰 `net`）。
+   - 两个新模块已加入 `ModuleManager.initialize()` 的 `modules` 数组。
+
 **刻意保留未改的**：
 - `chocolate_gradle` 插件名及其仓库链接（`Chocolate_Gradle`）——这是依赖项，不是本项目名。
 - `.gitmodules` 中子模块 URL 的 `Chocolate_mcp_src` / `Chocolate_javax_src` —— 外部仓库真名，必须保留。
@@ -150,7 +157,9 @@ maven { url = "https://nexus.velocitypowered.com/repository/maven-public/" } // 
 
 - **本地 JDK SSL 问题（仅本地构建，非 CI）**：若本机用老旧 JDK 8，`gradlew` 下载 Gradle 分发包或拉依赖时可能 `PKIX path building failed`/`522`。解决：用较新的 Zulu/Adoptium JDK 8；或 `set JAVA_OPTS=-Djavax.net.ssl.trustStoreType=Windows-ROOT`；或导入代理 CA 到 `cacerts`。`git` 本身不受影响（schannel）。
 
-- **性能优化方向（未做，需先 profile）**：建议用 VisualVM/JFR 抓一帧的 CPU 与分配再动手。事件总线反射提速仅对公开处理器有效；其余可看实体/粒子剔除、渲染分配等。
+- **性能优化方向（部分已做，见第 8 节第 6 条）**：`PerformanceMonitor` / `EntityCulling` / 字符串宽度缓存已实现。但**真正的“实体模型遮挡剔除”**在本架构下做不到：现有渲染钩子里 `RenderPlayerEvent` 是 POST（渲染后才发，无法取消）、`RenderNametagEvent` 无实体/距离字段（只能全局隐藏名牌）、`BlockBeRenderedEvent` 是方块面剔除（取消会导致远处方块“穿洞”）。要像 FPSMaster 那样按距离/遮挡跳过实体模型渲染，必须在 `net` 子模块里 `RenderGlobal`/`RendererLivingEntity` 注入可取消的 PRE 事件——即需要 **fork 子模块**（见本节上方窗口标题改名方案，同样流程），改完把 `.gitmodules` 指向 fork 并推上去，CI 才会拉到新 commit。
+
+- **性能优化方向（未做，需先 profile）**：建议用 VisualVM/JFR 抓一帧的 CPU 与分配再动手。事件总线反射提速仅对公开处理器有效；其余可看粒子剔除、纹理/模型缓存、可见区块复用等（这些大多需改 `net`，走 fork 子模块路线）。
 
 ## 10. 快速接手清单
 
