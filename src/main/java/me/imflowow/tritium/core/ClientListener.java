@@ -39,6 +39,7 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
+import org.lwjgl.opengl.Display;
 import tritium.api.utils.StringUtils;
 import tritium.api.utils.event.api.EventManager;
 import tritium.api.utils.event.api.EventTarget;
@@ -46,6 +47,7 @@ import tritium.api.utils.event.events.AttackEvent;
 import tritium.api.utils.event.events.KeyPressEvent;
 import tritium.api.utils.event.events.PacketEvent;
 import tritium.api.utils.event.events.SendMessageEvent;
+import tritium.api.utils.event.events.TickEvent;
 import tritium.netease.TritiumNetease;
 
 public class ClientListener {
@@ -58,6 +60,11 @@ public class ClientListener {
 	public ClientCape clientcape;
 
 	public DoMCerUtils domcer;
+
+	// The game window title is set to "Chocolate 1.8.9" inside the net submodule
+	// (Minecraft.java, external repo we must not edit). Override it here once, on the
+	// first client tick, so the title shows EXClient without touching the submodule.
+	private boolean titleRenamed = false;
 	public MCACUtils mcac;
 	public EPlusUtils eplus;
 
@@ -101,6 +108,14 @@ public class ClientListener {
 			//ELog.log_info("Listening KEY_RSHIFT gui toString",gui.toString());
 			//ELog.log_info("Listening KEY_RSHIFT gui.getModuleList toString",gui.getModuleList().toString());
 			//ELog.log_info("Listening KEY_RSHIFT","finish mc.displayGuiScreen(gui);");
+		}
+	}
+
+	@EventTarget
+	public void onTickRename(TickEvent event) {
+		if (!titleRenamed) {
+			Display.setTitle("EXClient 1.8.9");
+			titleRenamed = true;
 		}
 	}
 

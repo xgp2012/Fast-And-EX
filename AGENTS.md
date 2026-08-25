@@ -2,6 +2,8 @@
 
 Minecraft 1.8.9 Chinese PvP client (named "EXClient") built on Tritium-X. Java + Gradle using the custom `chocolate_gradle` plugin (not the standard `application` plugin).
 
+> 完整开发文档（结构、踩坑、本次改动、子模块约束、后续任务）见 **`DEVELOPMENT.md`**。本文件只保留最高信噪比的速查要点。
+
 ## Required environment
 - **JDK 8 only.** CI uses Zulu JDK 8 with Gradle 8.5. Newer JDKs will break the 1.8.9 client.
 - `JavaCompile` is forced to UTF-8 (Chinese sources/comments); keep source files UTF-8.
