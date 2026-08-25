@@ -95,7 +95,7 @@ public class ClientListener {
 	public void onKeyPress(KeyPressEvent event) {
 		// 打开面板放在最前面，避免后面的模块 toggle 循环抛异常（事件总线会吞异常）
 		// 导致 displayGuiScreen 永远执行不到、面板静默打不开。
-		if (event.getKey() == Keyboard.KEY_RSHIFT) {
+		if (event.getKey() == Keyboard.KEY_M) {
 			mc.displayGuiScreen(gui);
 		}
 
