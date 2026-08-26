@@ -9,7 +9,7 @@ import tritium.api.module.gui.GuiEntity;
 import tritium.api.module.value.impl.PositionValue;
 import tritium.api.utils.StringUtils;
 import tritium.api.utils.render.Rect;
-import tritium.api.utils.language.LangUtils.SizeType;
+import me.imflowow.tritium.utils.language.LangUtils.SizeType;
 
 public class PerformanceEntity extends GuiEntity {
 
